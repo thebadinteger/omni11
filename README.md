@@ -7,9 +7,22 @@ modes:
 ---
 ## run  
 ```powershell
-irm https://raw.githubusercontent.com/thebadinteger/omni11/refs/heads/main/omni11.ps1 | iex
+irm https://omni11.hs.vc/omni11.ps1 | iex
 ```
 (would ask for admin)  
+<details>
+<summary><b>if doesn't work</b> <i>(expandable)</i></summary>
+
+use direct github url
+```powershell
+irm https://raw.githubusercontent.com/thebadinteger/omni11/refs/heads/main/omni11.ps1 | iex
+```
+ssl/tls error fix (before main command)
+```powershell
+[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12
+```
+
+</details>
 
 ## menu
 ```
@@ -232,5 +245,6 @@ skipped vs failed:
 
 thanks:
 - [ChrisTitusTech/winutil](https://github.com/ChrisTitusTech/winutil)
-- [MarkAdderly/MakuTweaker](https://github.com/MarkAdderly/MakuTweaker)
 - [nano11-dev/nano11builder](https://github.com/nano11-dev/nano11builder)
+- free domain - [freedns.afraid.org](https://freedns.afraid.org/)
+- static host - [render.com](https://render.com/)
