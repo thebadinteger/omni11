@@ -41,10 +41,10 @@ ssl/tls error fix (before main command)
 [n] no, skip it
 [a] do it all (recommended)
 ```
-just a legend. every step asks on its own
 - enter or `y` = run this step
 - `n` = skip this step
-- `a` = run this step and all remaining steps without asking (if you know or don't know what you doing)
+- `a` = run this step and all remaining steps without asking (if you know or don't know what you doing)  
+mandatory pipeline steps run without asking
 
 1. critical steps (mount, copy, export, unmount) abort the whole flow on error
 2. non-critical steps report the error and continue

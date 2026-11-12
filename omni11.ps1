@@ -71,7 +71,7 @@ function Show-Legend {
 
 function Invoke-Step {
     param([string]$Name, [scriptblock]$Action, [switch]$Critical, [switch]$NoPrompt)
-    if (-not $script:RunAll -and -not $NoPrompt) {
+    if (-not $script:RunAll -and -not $NoPrompt -and -not $Critical) {
         Write-Host -NoNewline "$Name [ Y / n / a ] "
         $answer = (Read-Host).Trim().ToLower()
         if ($answer -eq 'n') {
@@ -665,7 +665,7 @@ function Invoke-IsoPatch {
                 Remove-Item -LiteralPath $appraiser -Force
                 New-Item -ItemType File $appraiser | Out-Null
             }
-        }
+        } -NoPrompt
 
         Invoke-Step 'read image info' {
             Invoke-Dism @('/Get-WimInfo', "/WimFile:$WorkDir\sources\$($S.Install)")
@@ -905,7 +905,7 @@ function Invoke-IsoPatch {
             Set-Reg 'HKLM\zSYSTEM\Setup\LabConfig' 'BypassTPMCheck' 1
             Set-Reg 'HKLM\zSYSTEM\Setup\MoSetup' 'AllowUpgradesWithUnsupportedTPMOrCPU' 1
             Unload-Hives
-        }
+        } -NoPrompt
 
         Invoke-Step 'unmount boot image' {
             Unload-Hives
@@ -916,13 +916,13 @@ function Invoke-IsoPatch {
             $answer = Get-Asset 'autounattend.xml'
             if (-not $answer) { throw 'autounattend.xml not found' }
             Copy-Item -LiteralPath $answer -Destination "$WorkDir\autounattend.xml" -Force
-        }
+        } -NoPrompt
 
         Invoke-Step 'create iso' {
             $oscdimg = Get-Oscdimg
             & $oscdimg -m -o -u2 -udfver102 "-bootdata:2#p0,e,b$WorkDir\boot\etfsboot.com#pEF,e,b$WorkDir\efi\microsoft\boot\efisys.bin" $WorkDir $S.Out
             if ($LASTEXITCODE -ne 0) { throw 'oscdimg failed' }
-        }
+        } -Critical
     } catch {
         Write-Host '[-] aborted' -ForegroundColor Red
     } finally {
